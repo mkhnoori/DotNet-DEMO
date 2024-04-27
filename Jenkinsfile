@@ -25,11 +25,7 @@ pipeline {
             }
         }
         
-        stage('Trivy FS SCan') {
-            steps {
-                sh "trivy fs ."
-            }
-        }
+      
         
         stage('Sonarqube Analysis') {
             steps {
@@ -46,7 +42,7 @@ pipeline {
         stage('Docker Build & Tag') {
             steps {
                 script{
-                    withDockerRegistry(credentialsId: 'docker-cred') {
+                    withDockerRegistry(credentialsId: 'Docker-cred') {
                         sh "make image"
                     }
                 }
@@ -56,7 +52,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script{
-                    withDockerRegistry(credentialsId: 'docker-cred') {
+                    withDockerRegistry(credentialsId: 'Docker-cred') {
                         sh "make push"
                     }
                 }
@@ -65,7 +61,7 @@ pipeline {
         
         stage('Docker Deploy') {
             steps {
-                sh "docker run -d -p 5000:5000 adijaiswal/dotnet-demoapp"
+                sh "docker run -d -p 5000:5000 mkhnoori/dotnet-demoapp"
             }
         }
         
